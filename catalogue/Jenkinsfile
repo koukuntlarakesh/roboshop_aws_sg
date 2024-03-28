@@ -38,6 +38,7 @@ pipeline {
         stage('dependencies') {
             steps {
                 sh """
+                cd catalogue
                 npm install
                 """
             }
