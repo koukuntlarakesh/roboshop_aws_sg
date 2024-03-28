@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script // we are script because this is ruby scripting
                 {
-                    def packageJson = readJSON file: 'package.json'
+                    def packageJson = readJSON file: 'catalogue/package.json'
                     packageVersion = packageJson.version
                     echo "package  version :  $packageVersion "
                 }
