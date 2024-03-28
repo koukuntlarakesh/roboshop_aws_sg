@@ -43,6 +43,14 @@ pipeline {
                 """
             }
         }
+         stage('zipping') {
+            steps {
+                sh """
+                cd catalogue
+                ls -l
+                """
+            }
+        }
         stage('Test') {
             steps {
                 echo  'Testing...'
