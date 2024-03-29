@@ -68,7 +68,7 @@ pipeline {
                     artifacts: [
                         [artifactId: 'catalogue',
                         classifier: '',
-                        file: 'TERRAFORM/catalogue/catalogue/catalogue.zip',
+                        file: 'TERRAFORM/catalogue/catalogue.zip',
                         type: 'zip']
                      ]
                     )
