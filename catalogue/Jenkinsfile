@@ -55,7 +55,7 @@ pipeline {
         }
         stage('artifact') {
             steps {
-          nexusArtifactUploader (
+            nexusArtifactUploader (
             nexusVersion:'nexus3',
             protocol:'http',
             nexusUrl: "${nexusUrl}",
@@ -78,13 +78,7 @@ pipeline {
           }
         }
         }
-        stage('Test') {
-            steps {
-                echo  'Testing...'
-                echo 'UPDATE'
-                echo  'LATEST'
-            }
-        }
+        
         stage('Deploy') {
             steps {
                 echo  'Deploying'
