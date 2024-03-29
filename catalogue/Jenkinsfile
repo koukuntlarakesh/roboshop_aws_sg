@@ -63,21 +63,18 @@ pipeline {
             version: "${packageVersion}" ,
             repository:'catalogue',
             credentialsId:'nexus-auth',
-            artifact [
-                [
-                artifactId:'catalogue',
+            artifacts [
+                [artifactId:'catalogue',
                 type:'zip',
                 classifier:'',
-                file: 'catalogue.zip'
-              ]
-            
-          ]
+                file: 'catalogue.zip']
+            ]
                 
           )
         
           }
         }
-    }
+    
 
     stage('Deploy') {
             steps {
