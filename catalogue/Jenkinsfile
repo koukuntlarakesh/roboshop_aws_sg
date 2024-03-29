@@ -59,15 +59,15 @@ pipeline {
             nexusVersion:'nexus3',
             protocol:'http',
             nexusUrl: "${nexusUrl}",
-            groupId:'com.roboshop'
+            groupId:'com.roboshop',
             version: "${packageVersion}" ,
-            repository:'catalogue'
-            credentialsId:'nexus-auth'
+            repository:'catalogue',
+            credentialsId:'nexus-auth',
             artifact [
                 [
-                artifactId:'catalogue'
-                type:'zip'
-                classifier:
+                artifactId:'catalogue',
+                type:'zip',
+                classifier:'',
                 file: 'catalogue.zip'
               ]
             
