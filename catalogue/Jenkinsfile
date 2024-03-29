@@ -7,10 +7,11 @@ pipeline {
     options {
         timeout(time: 1, unit: 'HOURS') 
         disableConcurrentBuilds()
+        ansiColor('xterm')
     }
     environment {
         packageVersion = ''
-        nexusUrl= "http://44.203.173.186:8081"
+        nexusUrl= "44.203.173.186:8081"
 
         }
     
