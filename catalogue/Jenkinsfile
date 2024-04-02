@@ -64,7 +64,7 @@ pipeline {
                     groupId: 'com.roboshop',
                     version: "${packageVersion}",
                     repository: 'catalogue',
-                    credentialsId: 'nexus-auth',
+                    credentialsId: 'nexus_auth',
                     artifacts: [
                         [artifactId: 'catalogue',
                         classifier: '',
@@ -77,9 +77,14 @@ pipeline {
 
     
 
-        stage('Deploy') {
+        stage('trigger another pipeline') {
             steps {
-                echo  'Deploying'
+                script{
+                build job: 'catalogue-deploy', wait:true  parameters: [
+                string(name: 'version', value: "${packageVersion}"),
+                 string(name: 'environment', value: 'dev')
+    ]
+                }
             }
         }
         
