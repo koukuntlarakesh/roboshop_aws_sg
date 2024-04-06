@@ -1,105 +1,15 @@
-pipeline {
-   agent {
-    node {
-        label 'agent1'
-    }
-    }
-    options {
-        timeout(time: 1, unit: 'HOURS') 
-        disableConcurrentBuilds()
-        ansiColor('xterm')
-    }
-    environment {
-        packageVersion = ''
-        nexusUrl= "172.31.92.65:8081"
+#!groovy
+@Library('roboshop_shared_library') _
 
-        }
-    
-    // parameters {
-    //     string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+// responsibility to pass what type of application and component is this to pipeline deicssion
 
-    //     text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
-
-    //     booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
-
-    //     choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
-
-    //     password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
-    
-    stages {
-        stage('getting version') {
-            steps {
-                script // we are script because this is ruby scripting
-                {
-                    def packageJson = readJSON file: 'catalogue/package.json'
-                    packageVersion = packageJson.version
-                    echo "package  version :  $packageVersion "
-                }
-            }
-        }
-        stage('dependencies') {
-            steps {
-                sh """
-                cd catalogue
-                npm install
-                """
-            }
-        }
-        stage('build') {
-            steps {
-                sh """
-                cd catalogue
-                ls -la
-                zip -q -r catalogue.zip ./* -x ".git" -x "*.zip"
-                 ls -ltr
-                """
-            }
-        }
-        stage('PublishArtifact') {
-            steps {
-                nexusArtifactUploader(
-                    nexusVersion: 'nexus3',
-                    protocol: 'http',
-                    nexusUrl: "${nexusURL}",
-                    groupId: 'com.roboshop',
-                    version: "${packageVersion}",
-                    repository: 'catalogue',
-                    credentialsId: 'nexus_auth',
-                    artifacts: [
-                        [artifactId: 'catalogue',
-                        classifier: '',
-                        file: 'catalogue/catalogue.zip',
-                        type: 'zip']
-                     ]
-                    )
-                   }
-                }
-
-    
-
-        stage('trigger another pipeline') {
-            steps {
-                script{
-                //     def  params = [
-                //     string(name: 'version', value: "$packageVersion"),
-                //     string(name: 'environment', value: 'dev') ]
-                //   build job: 'catalogue_deploy', wait:true parameters: params
-                  def params = [
-                            string(name: 'version', value: "$packageVersion"),
-                            string(name: 'environment', value: "dev")
-                        ]
-                        build job: "catalogue_deploy", wait: true, parameters: params
-                }
-            }
-        }
-        
-    }
-     post { 
-        always { 
-            echo 'I will always say Hello again!'
-             deleteDir()
-        }
-     }
-        
-    
-    }
+def configMap = [
+    application: "nodejsVM",
+    component: "catalogue"
+]
+if( ! env.BRANCH_NAME.equalsIgnoreCase('main')){
+    pipelineDecission.decidePipeline(configMap)
+}
+else{
+    echo "This is PRODUCTION, deal with CR process"
+}
